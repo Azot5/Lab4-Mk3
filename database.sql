@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    login TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL,
+    balance INTEGER DEFAULT 0,
+    transactions TEXT DEFAULT '{}'
+);

@@ -1,0 +1,247 @@
+{
+  "info": {
+    "name": "Lab #4 Mk3",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Register User",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"login\": \"testuser\",\n  \"password\": \"testpassword\"\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/register",
+          "protocol": "http",
+          "host": [ "127", "0", "0", "1" ],
+          "port": "5000",
+          "path": [ "register" ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login User",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"login\": \"testuser\",\n  \"password\": \"testpassword\"\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/login",
+          "protocol": "http",
+          "host": [ "127", "0", "0", "1" ],
+          "port": "5000",
+          "path": [ "login" ]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Save token\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.environment.set(\"authToken\", jsonData.token);",
+              "    pm.environment.set(\"userId\", jsonData.user_id);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get User Balance",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"token\": \"{{authToken}}\",\n  \"user_id\": {{userId}}\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/balance",
+          "protocol": "http",
+          "host": [ "127", "0", "0", "1" ],
+          "port": "5000",
+          "path": [ "balance" ]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Get balance successfully\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(pm.response.code).to.eql(200);",
+              "    pm.expect(jsonData).to.have.property('balance');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get User Transactions",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"token\": \"{{authToken}}\",\n  \"user_id\": {{userId}}\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/transactions",
+          "protocol": "http",
+          "host": [ "127", "0", "0", "1" ],
+          "port": "5000",
+          "path": [ "transactions" ]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Get transactions successfully\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(pm.response.code).to.eql(200);",
+              "    pm.expect(jsonData).to.have.property('transactions');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Update User Data (Transaction)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"token\": \"{{authToken}}\",\n  \"user_id\": {{userId}},\n  \"transaction_value\": 150\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/transaction",
+          "protocol": "http",
+          "host": [ "127", "0", "0", "1" ],
+          "port": "5000",
+          "path": [ "transaction" ]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Transaction successful\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(pm.response.code).to.eql(200);",
+              "    pm.expect(jsonData).to.have.property('new_balance');",
+              "    pm.expect(jsonData).to.have.property('transactions');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Delete User",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"token\": \"{{authToken}}\",\n  \"user_id\": {{userId}}\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/delete_user",
+          "protocol": "http",
+          "host": [ "127", "0", "0", "1" ],
+          "port": "5000",
+          "path": [ "delete_user" ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://127.0.0.1:5000/health",
+          "protocol": "http",
+          "host": [ "127", "0", "0", "1" ],
+          "port": "5000",
+          "path": [ "health" ]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Health check successful\", function () {",
+              "    pm.expect(pm.response.code).to.eql(200);",
+              "    pm.expect(pm.response.json()).to.have.property('status', 'Server is running');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    }
+  ]
+}
